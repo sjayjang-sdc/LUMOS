@@ -997,3 +997,49 @@
     if (type === "check") return e.checked;
     if (type === "num") { const n = Number(e.value); return Number.isFinite(n) ? n : undefined; }
     return e.value;
+  }
+  function dgSet(id, type, v) {
+    const e = U.$("#" + id);
+    if (!e || v == null) return;
+    if (type === "check") e.checked = !!v; else e.value = v;
+  }
+  function persistSettings() {
+    const s = {};
+    for (const [id, key, type] of PERSIST) { const v = dgGet(id, type); if (v !== undefined) s[key] = v; }
+    s.view = viewValue();
+    window.LUMOS_config.update({ digitizer_settings: s });
+  }
+  function restoreSettings() {
+    const cfg = window.LUMOS_config.load().digitizer_settings || {};
+    for (const [id, key, type] of PERSIST) { if (cfg[key] !== undefined) dgSet(id, type, cfg[key]); }
+    const v = cfg.view || "Original";
+    U.$$('input[name="dg-view"]').forEach((r) => { r.checked = r.value === v; });
+  }
+  function resetPrepDefaults() {
+    const d = window.LUMOS_config.DEFAULTS.digitizer_settings;
+    for (const [id, key, type, group] of PERSIST) { if (group === "prep") dgSet(id, type, d[key]); }
+    _state.previewDirty = true;
+    render();
+    if (_persist) _persist();
+    U.setStatus("Preprocess settings reset to defaults.");
+  }
+
+  function init(root) {
+    buildUI(root);
+    bindEvents(root);
+    _persist = U.debounce(persistSettings, 300);
+    restoreSettings();
+    PERSIST.forEach(([id]) => { const e = U.$("#" + id); if (!e) return; e.addEventListener("change", _persist); e.addEventListener("input", _persist); });
+    U.$$('input[name="dg-view"]').forEach((r) => r.addEventListener("change", _persist));
+    U.$("#dg-prep-defaults").addEventListener("click", resetPrepDefaults);
+  }
+
+  function onShow() {
+    if (_state?.gray) requestAnimationFrame(render);
+  }
+
+  window.LUMOS_tab_digitizer = { init, onShow };
+})();
+
+
+    
