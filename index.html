@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LUMOS — Browser Edition</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">LUMOS <small>Browser</small></div>
+    <nav class="tabs" id="tab-bar">
+      <button class="tab active" data-tab="plot">Data plot</button>
+      <button class="tab" data-tab="map">Map Generator</button>
+      <button class="tab" data-tab="boxplot">Box Plot</button>
+      <button class="tab" data-tab="digitizer">Digitizer</button>
+    </nav>
+    <div class="header-right">
+      <button id="btn-settings" title="Preferences">⚙</button>
+      <button id="btn-about" title="About">?</button>
+    </div>
+  </header>
+
+  <main id="tab-host">
+    <section class="tab-panel active" data-tab="plot">
+      <div class="tab-content" id="tab-plot"></div>
+    </section>
+    <section class="tab-panel" data-tab="map">
+      <div class="tab-content" id="tab-map"></div>
+    </section>
+    <section class="tab-panel" data-tab="boxplot">
+      <div class="tab-content" id="tab-boxplot"></div>
+    </section>
+    <section class="tab-panel" data-tab="digitizer">
+      <div class="tab-content" id="tab-digitizer"></div>
+    </section>
+  </main>
+
+  <footer id="statusbar">
+    <span id="status-text">Ready</span>
+    <span id="status-version">v0.5 — vanilla</span>
+  </footer>
+
+  <!-- Settings modal (master-detail: nav list + stacked pages) -->
+  <div class="modal hidden" id="settings-modal">
+    <div class="modal-content settings-modal-content">
+      <h2>Preferences</h2>
+      <div class="settings-body">
+        <ul class="settings-nav" id="settings-nav"></ul>
+        <div class="settings-pages" id="settings-pages"></div>
+      </div>
+      <div class="modal-buttons">
+        <button id="settings-cancel">Cancel</button>
+        <button id="settings-ok" class="primary">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- About modal -->
+  <div class="modal hidden" id="about-modal">
+    <div class="modal-content">
+      <h2>LUMOS <span class="about-ver">v0.5</span></h2>
+      <p class="about-acronym">Logical Understanding &amp; Modeling Optimized System</p>
+      <p>No-install, in-browser data visualisation. Vanilla HTML/CSS/JS, no build step, no external libraries.</p>
+      <ul>
+        <li>Data plot — multi-subplot scatter / line from pasted TSV</li>
+        <li>Map Generator — RBF / IDW interpolation, contour heatmap, stats (multi-Z)</li>
+        <li>Box Plot — box plots with outliers, group split, stats table</li>
+        <li>Digitizer — plot image to data, with calibration / brush / colour pick</li>
+      </ul>
+      <div class="about-credits">
+        <div><span class="about-role">Made by</span> 장승현 P</div>
+        <div><span class="about-role">Named by</span> 문연건 P</div>
+      </div>
+      <div class="modal-buttons">
+        <button id="about-close" class="primary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Module-typed scripts — load order matters (utils first, tabs last). -->
+  <script src="js/config.js"></script>
+  <script src="js/log.js"></script>
+  <script src="js/util.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/parse.js"></script>
+  <script src="js/numerics.js"></script>
+  <script src="js/plotting.js"></script>
+  <script src="js/imageproc.js"></script>
+  <script src="js/tabs/plot.js"></script>
+  <script src="js/tabs/map.js"></script>
+  <script src="js/tabs/boxplot.js"></script>
+  <script src="js/tabs/digitizer.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
